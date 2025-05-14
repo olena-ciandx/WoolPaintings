@@ -16,10 +16,6 @@
       color: #333;
       margin-bottom: 20px;
     }
-    #admin-section {
-      display: none;
-      margin-bottom: 20px;
-    }
     #gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -66,17 +62,6 @@
       font-size: 30px;
       cursor: pointer;
     }
-    button {
-      padding: 10px 20px;
-      background: #333;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #555;
-    }
     @media (max-width: 600px) {
       #gallery {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -86,11 +71,6 @@
 </head>
 <body>
   <h1>Nataliya's Wool Paintings</h1>
-  <button onclick="showAdmin()">Owner Login</button>
-  <div id="admin-section">
-    <input type="file" id="image-upload" accept="image/jpeg" multiple>
-    <button onclick="uploadImages()">Upload Selected Images</button>
-  </div>
   <div id="gallery"></div>
   <div id="fullscreen">
     <span id="close-fullscreen">×</span>
@@ -98,61 +78,34 @@
   </div>
 
   <script>
+    // List of your images
+    const images = [
+      'image1.jpg',
+      'image2.jpg',
+      'image3.jpg',
+      'image4.jpg'
+      // Add more if needed, e.g., 'image5.jpg'
+    ];
+
     const gallery = document.getElementById('gallery');
-    const adminSection = document.getElementById('admin-section');
-    const imageUpload = document.getElementById('image-upload');
     const fullscreen = document.getElementById('fullscreen');
     const fullscreenImage = document.getElementById('fullscreen-image');
     const closeFullscreen = document.getElementById('close-fullscreen');
 
-    // Load images from localStorage
-    let storedImages = JSON.parse(localStorage.getItem('woolPaintingsImages')) || [ 'image1.jpg',
-  'image2.jpg','image3.jpg','image4.jpg'];
-
-    // Display images in gallery
-    function displayGallery() {
-      gallery.innerHTML = ''; // Clear existing gallery
-      storedImages.forEach((imageSrc, index) => {
-        const img = document.createElement('img');
-        img.src = imageSrc;
-        img.alt = `Painting ${index + 1}`;
-        const galleryItem = document.createElement('div');
-        galleryItem.className = 'gallery-item';
-        galleryItem.appendChild(img);
-        galleryItem.addEventListener('click', () => {
-          fullscreenImage.src = img.src;
-          fullscreen.style.display = 'flex';
-        });
-        gallery.appendChild(galleryItem);
+    // Populate the gallery
+    images.forEach((imageSrc, index) => {
+      const img = document.createElement('img');
+      img.src = imageSrc;
+      img.alt = `Painting ${index + 1}`; // Kept 'Painting' for accessibility
+      const galleryItem = document.createElement('div');
+      galleryItem.className = 'gallery-item';
+      galleryItem.appendChild(img);
+      galleryItem.addEventListener('click', () => {
+        fullscreenImage.src = img.src;
+        fullscreen.style.display = 'flex';
       });
-    }
-
-    // Upload images
-    function uploadImages() {
-      const files = imageUpload.files;
-      for (let file of files) {
-        if (file.type === 'image/jpeg') {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            storedImages.push(e.target.result); // Add base64 string
-            localStorage.setItem('woolPaintingsImages', JSON.stringify(storedImages));
-            displayGallery();
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-      imageUpload.value = ''; // Clear input
-    }
-
-    // Show admin section with password
-    function showAdmin() {
-      const password = prompt('Enter owner password:');
-      if (password === 'admin123') { // Change this to your preferred password
-        adminSection.style.display = 'block';
-      } else {
-        alert('Incorrect password');
-      }
-    }
+      gallery.appendChild(galleryItem);
+    });
 
     // Close full-screen view
     closeFullscreen.addEventListener('click', () => {
@@ -165,9 +118,6 @@
         fullscreen.style.display = 'none';
       }
     });
-
-    // Initial gallery load
-    displayGallery();
   </script>
 </body>
 </html>
