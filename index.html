@@ -62,6 +62,7 @@
       max-height: 90%;
       border: 5px solid white;
       border-radius: 5px;
+      z-index: 1001; /* Ensure image is above background but below arrows */
     }
     #close-fullscreen {
       position: absolute;
@@ -70,19 +71,21 @@
       color: white;
       font-size: 30px;
       cursor: pointer;
+      z-index: 1002; /* Above arrows */
     }
     .nav-arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      color: white;
+      color: white; /* White arrows for contrast */
       font-size: 40px;
       cursor: pointer;
-      background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-      padding: 10px;
+      background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+      padding: 10px 15px;
       border-radius: 5px;
       user-select: none;
-      z-index: 1001;
+      z-index: 1002; /* Above image */
+      transition: background 0.2s; /* Smooth hover effect */
     }
     .nav-arrow:hover {
       background: rgba(0, 0, 0, 0.7); /* Darker on hover */
@@ -100,11 +103,11 @@
       .gallery-item {
         width: 170px;
         height: 170px;
-        padding: 8px; /* Slightly reduced padding for mobile */
+        padding: 8px;
       }
       .nav-arrow {
         font-size: 30px; /* Smaller arrows on mobile */
-        padding: 8px;
+        padding: 8px 12px;
       }
     }
   </style>
@@ -169,6 +172,7 @@
         fullscreenImage.src = imageSrc;
         fullscreenImage.alt = `Painting ${index + 1}`;
         fullscreen.style.display = 'flex';
+        console.log('Full-screen opened, image index:', index); // Debug
       });
       gallery.appendChild(galleryItem);
     });
@@ -177,13 +181,15 @@
     closeFullscreen.addEventListener('click', () => {
       fullscreen.style.display = 'none';
       currentImageIndex = -1; // Reset index
+      console.log('Full-screen closed'); // Debug
     });
 
-    // Close full-screen on click outside image
+    // Close full-screen on click outside image or arrows
     fullscreen.addEventListener('click', (e) => {
       if (e.target === fullscreen) {
         fullscreen.style.display = 'none';
         currentImageIndex = -1; // Reset index
+        console.log('Full-screen closed via background click'); // Debug
       }
     });
 
@@ -192,6 +198,7 @@
       currentImageIndex = newIndex;
       fullscreenImage.src = images[currentImageIndex];
       fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+      console.log('Image changed to index:', newIndex); // Debug
     }
 
     // Navigate images with arrow keys
@@ -222,6 +229,7 @@
     fullscreen.addEventListener('touchstart', (e) => {
       if (fullscreen.style.display === 'flex') {
         touchStartX = e.touches[0].clientX; // Store starting X position
+        console.log('Touch start, X:', touchStartX); // Debug
       }
     });
 
