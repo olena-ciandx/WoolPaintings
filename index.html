@@ -62,15 +62,6 @@
       max-height: 90%;
       border: 5px solid white;
       border-radius: 5px;
-      transition: opacity 0.3s ease-in-out; /* Smooth fade transition */
-    }
-    #close-fullscreen {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      color: white;
-      font-size: 30px;
-      cursor: pointer;
     }
     @media (max-width: 600px) {
       #gallery {
@@ -80,6 +71,9 @@
         width: 170px;
         height: 170px;
         padding: 8px; /* Slightly reduced padding for mobile */
+      }
+      #fullscreen img {
+        transition: opacity 0.3s ease-in-out; /* Fade transition only for mobile */
       }
     }
   </style>
@@ -159,8 +153,8 @@
       }
     });
 
-    // Function to change image with fade effect
-    function changeImage(newIndex) {
+    // Function to change image with fade effect (for mobile)
+    function changeImageWithFade(newIndex) {
       fullscreenImage.style.opacity = '0'; // Fade out
       setTimeout(() => {
         currentImageIndex = newIndex;
@@ -170,20 +164,27 @@
       }, 300); // Match transition duration (0.3s)
     }
 
-    // Navigate images with arrow keys
+    // Function to change image instantly (for desktop)
+    function changeImageInstant(newIndex) {
+      currentImageIndex = newIndex;
+      fullscreenImage.src = images[currentImageIndex];
+      fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+    }
+
+    // Navigate images with arrow keys (instant change for desktop)
     document.addEventListener('keydown', (e) => {
       if (fullscreen.style.display === 'flex') {
         if (e.key === 'ArrowRight') {
           const newIndex = (currentImageIndex + 1) % images.length; // Next image, wrap around
-          changeImage(newIndex);
+          changeImageInstant(newIndex);
         } else if (e.key === 'ArrowLeft') {
           const newIndex = (currentImageIndex - 1 + images.length) % images.length; // Previous image, wrap around
-          changeImage(newIndex);
+          changeImageInstant(newIndex);
         }
       }
     });
 
-    // Swipe navigation for touch devices
+    // Swipe navigation for touch devices (fade transition)
     fullscreen.addEventListener('touchstart', (e) => {
       if (fullscreen.style.display === 'flex') {
         touchStartX = e.touches[0].clientX; // Store starting X position
@@ -198,11 +199,11 @@
 
         if (swipeDistance > swipeThreshold) { // Swipe left (next image)
           const newIndex = (currentImageIndex + 1) % images.length;
-          changeImage(newIndex);
+          changeImageWithFade(newIndex);
           touchStartX = touchEndX; // Reset start position
         } else if (swipeDistance < -swipeThreshold) { // Swipe right (previous image)
           const newIndex = (currentImageIndex - 1 + images.length) % images.length;
-          changeImage(newIndex);
+          changeImageWithFade(newIndex);
           touchStartX = touchEndX; // Reset start position
         }
       }
