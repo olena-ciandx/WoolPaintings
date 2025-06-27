@@ -18,7 +18,7 @@
     }
     #gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 10px;
       max-width: 1200px;
       margin: 0 auto;
@@ -26,12 +26,21 @@
     .gallery-item {
       cursor: pointer;
       transition: transform 0.2s;
+      width: 220px;
+      height: 220px;
+      background-color: black; /* Black square background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid #333333; /* Dark gray frame */
+      box-sizing: border-box;
+      padding: 10px; /* Extra space for full black frame around image */
     }
     .gallery-item img {
-      width: 100%;
-      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain; /* Fit image within square, preserving aspect ratio */
       border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .gallery-item:hover {
       transform: scale(1.05);
@@ -64,7 +73,12 @@
     }
     @media (max-width: 600px) {
       #gallery {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      }
+      .gallery-item {
+        width: 170px;
+        height: 170px;
+        padding: 8px; /* Slightly reduced padding for mobile */
       }
     }
   </style>
@@ -83,25 +97,46 @@
       'image1.jpg',
       'image2.jpg',
       'image3.jpg',
-      'image4.jpg'
-      // Add more if needed, e.g., 'image5.jpg'
+      'image4.jpg',
+      'image5.jpg',
+      'image6.jpg',
+      'image7.jpg',
+      'image8.jpg',
+      'image9.jpg',
+      'image10.jpg',
+      'image11.jpg',
+      'image12.jpg',
+      'image13.jpg',
+      'image14.jpg',
+      'image15.jpg',
+      'image16.jpg',
+      'image17.jpg',
+      'image18.jpg',
+      'image19.jpg',
+      'image20.jpg',
+      'image21.jpg',
+      'image22.jpg',
+      'image23.jpg'
     ];
 
     const gallery = document.getElementById('gallery');
     const fullscreen = document.getElementById('fullscreen');
     const fullscreenImage = document.getElementById('fullscreen-image');
     const closeFullscreen = document.getElementById('close-fullscreen');
+    let currentImageIndex = -1; // Track the current image in full-screen
 
     // Populate the gallery
     images.forEach((imageSrc, index) => {
       const img = document.createElement('img');
       img.src = imageSrc;
-      img.alt = `Painting ${index + 1}`; // Kept 'Painting' for accessibility
+      img.alt = `Painting ${index + 1}`;
       const galleryItem = document.createElement('div');
       galleryItem.className = 'gallery-item';
       galleryItem.appendChild(img);
       galleryItem.addEventListener('click', () => {
-        fullscreenImage.src = img.src;
+        currentImageIndex = index; // Set the clicked image index
+        fullscreenImage.src = imageSrc;
+        fullscreenImage.alt = `Painting ${index + 1}`;
         fullscreen.style.display = 'flex';
       });
       gallery.appendChild(galleryItem);
@@ -110,12 +145,29 @@
     // Close full-screen view
     closeFullscreen.addEventListener('click', () => {
       fullscreen.style.display = 'none';
+      currentImageIndex = -1; // Reset index
     });
 
     // Close full-screen on click outside image
     fullscreen.addEventListener('click', (e) => {
       if (e.target === fullscreen) {
         fullscreen.style.display = 'none';
+        currentImageIndex = -1; // Reset index
+      }
+    });
+
+    // Navigate images with arrow keys
+    document.addEventListener('keydown', (e) => {
+      if (fullscreen.style.display === 'flex') {
+        if (e.key === 'ArrowRight') {
+          currentImageIndex = (currentImageIndex + 1) % images.length; // Next image, wrap around
+          fullscreenImage.src = images[currentImageIndex];
+          fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+        } else if (e.key === 'ArrowLeft') {
+          currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Previous image, wrap around
+          fullscreenImage.src = images[currentImageIndex];
+          fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+        }
       }
     });
   </script>
