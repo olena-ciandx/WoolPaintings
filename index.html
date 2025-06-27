@@ -124,6 +124,7 @@
     const fullscreenImage = document.getElementById('fullscreen-image');
     const closeFullscreen = document.getElementById('close-fullscreen');
     let currentImageIndex = -1; // Track the current image in full-screen
+    let touchStartX = 0; // Track touch start position for swipe
 
     // Populate the gallery
     images.forEach((imageSrc, index) => {
@@ -167,6 +168,33 @@
           currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Previous image, wrap around
           fullscreenImage.src = images[currentImageIndex];
           fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+        }
+      }
+    });
+
+    // Swipe navigation for touch devices
+    fullscreen.addEventListener('touchstart', (e) => {
+      if (fullscreen.style.display === 'flex') {
+        touchStartX = e.touches[0].clientX; // Store starting X position
+      }
+    });
+
+    fullscreen.addEventListener('touchmove', (e) => {
+      if (fullscreen.style.display === 'flex') {
+        const touchEndX = e.touches[0].clientX;
+        const swipeDistance = touchStartX - touchEndX;
+        const swipeThreshold = 50; // Minimum distance for a swipe (in pixels)
+
+        if (swipeDistance > swipeThreshold) { // Swipe left (next image)
+          currentImageIndex = (currentImageIndex + 1) % images.length;
+          fullscreenImage.src = images[currentImageIndex];
+          fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+          touchStartX = touchEndX; // Reset start position
+        } else if (swipeDistance < -swipeThreshold) { // Swipe right (previous image)
+          currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+          fullscreenImage.src = images[currentImageIndex];
+          fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+          touchStartX = touchEndX; // Reset start position
         }
       }
     });
