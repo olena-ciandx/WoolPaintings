@@ -71,6 +71,28 @@
       font-size: 30px;
       cursor: pointer;
     }
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+      font-size: 40px;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+      padding: 10px;
+      border-radius: 5px;
+      user-select: none;
+      z-index: 1001;
+    }
+    .nav-arrow:hover {
+      background: rgba(0, 0, 0, 0.7); /* Darker on hover */
+    }
+    #prev-arrow {
+      left: 20px;
+    }
+    #next-arrow {
+      right: 20px;
+    }
     @media (max-width: 600px) {
       #gallery {
         grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
@@ -80,6 +102,10 @@
         height: 170px;
         padding: 8px; /* Slightly reduced padding for mobile */
       }
+      .nav-arrow {
+        font-size: 30px; /* Smaller arrows on mobile */
+        padding: 8px;
+      }
     }
   </style>
 </head>
@@ -88,7 +114,9 @@
   <div id="gallery"></div>
   <div id="fullscreen">
     <span id="close-fullscreen">×</span>
+    <span id="prev-arrow" class="nav-arrow">←</span>
     <img id="fullscreen-image" src="" alt="Full-screen image">
+    <span id="next-arrow" class="nav-arrow">→</span>
   </div>
 
   <script>
@@ -123,6 +151,8 @@
     const fullscreen = document.getElementById('fullscreen');
     const fullscreenImage = document.getElementById('fullscreen-image');
     const closeFullscreen = document.getElementById('close-fullscreen');
+    const prevArrow = document.getElementById('prev-arrow');
+    const nextArrow = document.getElementById('next-arrow');
     let currentImageIndex = -1; // Track the current image in full-screen
     let touchStartX = 0; // Track touch start position for swipe
 
@@ -157,18 +187,34 @@
       }
     });
 
+    // Function to change image
+    function changeImage(newIndex) {
+      currentImageIndex = newIndex;
+      fullscreenImage.src = images[currentImageIndex];
+      fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+    }
+
     // Navigate images with arrow keys
     document.addEventListener('keydown', (e) => {
       if (fullscreen.style.display === 'flex') {
         if (e.key === 'ArrowRight') {
-          currentImageIndex = (currentImageIndex + 1) % images.length; // Next image, wrap around
-          fullscreenImage.src = images[currentImageIndex];
-          fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+          changeImage((currentImageIndex + 1) % images.length); // Next image, wrap around
         } else if (e.key === 'ArrowLeft') {
-          currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; // Previous image, wrap around
-          fullscreenImage.src = images[currentImageIndex];
-          fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+          changeImage((currentImageIndex - 1 + images.length) % images.length); // Previous image, wrap around
         }
+      }
+    });
+
+    // Navigate images with arrow buttons
+    nextArrow.addEventListener('click', () => {
+      if (fullscreen.style.display === 'flex') {
+        changeImage((currentImageIndex + 1) % images.length); // Next image, wrap around
+      }
+    });
+
+    prevArrow.addEventListener('click', () => {
+      if (fullscreen.style.display === 'flex') {
+        changeImage((currentImageIndex - 1 + images.length) % images.length); // Previous image, wrap around
       }
     });
 
@@ -186,14 +232,10 @@
         const swipeThreshold = 50; // Minimum distance for a swipe (in pixels)
 
         if (swipeDistance > swipeThreshold) { // Swipe left (next image)
-          currentImageIndex = (currentImageIndex + 1) % images.length;
-          fullscreenImage.src = images[currentImageIndex];
-          fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+          changeImage((currentImageIndex + 1) % images.length);
           touchStartX = touchEndX; // Reset start position
         } else if (swipeDistance < -swipeThreshold) { // Swipe right (previous image)
-          currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-          fullscreenImage.src = images[currentImageIndex];
-          fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
+          changeImage((currentImageIndex - 1 + images.length) % images.length);
           touchStartX = touchEndX; // Reset start position
         }
       }
