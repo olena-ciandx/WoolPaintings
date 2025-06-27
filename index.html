@@ -62,30 +62,35 @@
       max-height: 90%;
       border: 5px solid white;
       border-radius: 5px;
-      z-index: 1001; /* Ensure image is above background but below arrows */
+      z-index: 1001; /* Image above background */
+      position: relative; /* Ensure image doesn't interfere with arrows */
     }
     #close-fullscreen {
-      position: absolute;
+      position: fixed;
       top: 20px;
       right: 20px;
       color: white;
       font-size: 30px;
       cursor: pointer;
-      z-index: 1002; /* Above arrows */
+      z-index: 1003; /* Above arrows and image */
     }
     .nav-arrow {
-      position: absolute;
+      position: fixed; /* Fixed positioning for consistent placement */
       top: 50%;
       transform: translateY(-50%);
       color: white; /* White arrows for contrast */
       font-size: 40px;
       cursor: pointer;
       background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-      padding: 10px 15px;
+      padding: 15px 20px; /* Larger click/tap area */
       border-radius: 5px;
       user-select: none;
-      z-index: 1002; /* Above image */
-      transition: background 0.2s; /* Smooth hover effect */
+      -webkit-user-select: none; /* Safari compatibility */
+      -moz-user-select: none; /* Firefox compatibility */
+      -ms-user-select: none; /* Edge compatibility */
+      z-index: 1003; /* Above image */
+      transition: background 0.2s ease-in-out; /* Smooth hover effect */
+      -webkit-tap-highlight-color: transparent; /* Prevent tap highlight on iOS */
     }
     .nav-arrow:hover {
       background: rgba(0, 0, 0, 0.7); /* Darker on hover */
@@ -107,7 +112,7 @@
       }
       .nav-arrow {
         font-size: 30px; /* Smaller arrows on mobile */
-        padding: 8px 12px;
+        padding: 10px 15px; /* Adjusted for mobile */
       }
     }
   </style>
