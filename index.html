@@ -11,6 +11,7 @@
       padding: 20px;
       background-color: #f4f4f4;
       text-align: center;
+      overflow: hidden; /* Prevent body scroll on iOS */
     }
     h1 {
       color: #333;
@@ -27,23 +28,32 @@
       cursor: pointer;
       transition: transform 0.2s;
       width: 220px;
-      height: 220px;
       background-color: black; /* Black square background */
-      display: flex;
-      justify-content: center;
-      align-items: center;
       border: 2px solid #333333; /* Dark gray frame */
       box-sizing: border-box;
       padding: 10px; /* Extra space for full black frame around image */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .gallery-item img {
-      max-width: 100%;
-      max-height: 100%;
+      width: 200px;
+      height: 200px;
       object-fit: contain; /* Fit image within square, preserving aspect ratio */
       border-radius: 5px;
     }
     .gallery-item:hover {
       transform: scale(1.05);
+    }
+    .gallery-item .caption {
+      color: white;
+      font-size: 14px;
+      margin-top: 5px;
+      text-align: center;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     #fullscreen {
       display: none;
@@ -57,14 +67,27 @@
       align-items: center;
       z-index: 1000;
       overflow: hidden; /* Prevent scroll issues on iOS */
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling if needed */
     }
     #fullscreen img {
-      max-width: 90%;
-      max-height: 90%;
+      max-width: 80%; /* Space for arrows and caption */
+      max-height: 80%;
       border: 5px solid white;
       border-radius: 5px;
       z-index: 1001; /* Image above background */
-      position: relative; /* Ensure image doesn't interfere with arrows */
+      position: relative;
+    }
+    #fullscreen .caption {
+      position: absolute;
+      bottom: 20px;
+      color: white;
+      font-size: 16px;
+      text-align: center;
+      max-width: 80%;
+      z-index: 1003; /* Above image */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     #close-fullscreen {
       position: fixed;
@@ -76,7 +99,7 @@
       z-index: 1003; /* Above arrows and image */
     }
     .nav-arrow {
-      position: fixed; /* Fixed positioning for consistent placement */
+      position: fixed;
       top: 50%;
       transform: translateY(-50%);
       color: white; /* White arrows for contrast */
@@ -93,15 +116,19 @@
       transition: background 0.2s ease-in-out; /* Smooth hover effect */
       -webkit-tap-highlight-color: transparent; /* Prevent tap highlight on iOS */
       line-height: 1; /* Ensure consistent arrow alignment */
+      touch-action: manipulation; /* Prevent iOS pinch/zoom interference */
     }
     .nav-arrow:hover {
-      background: rgba(0, 0, 0, 0.7); /* Darker on hover/tap */
+      background: rgba(0, 0, 0, 0.7); /* Darker on hover */
+    }
+    .nav-arrow.hide-in-safari {
+      display: none; /* Hide arrows in Safari */
     }
     #prev-arrow {
-      left: 20px;
+      left: 10px;
     }
     #next-arrow {
-      right: 20px;
+      right: 10px;
     }
     @media (max-width: 600px) {
       #gallery {
@@ -109,12 +136,24 @@
       }
       .gallery-item {
         width: 170px;
-        height: 170px;
         padding: 8px;
+      }
+      .gallery-item img {
+        width: 150px;
+        height: 150px;
+      }
+      .gallery-item .caption {
+        font-size: 12px;
+        max-width: 150px;
       }
       .nav-arrow {
         font-size: 30px; /* Smaller arrows on mobile */
         padding: 10px 15px; /* Adjusted for mobile */
+      }
+      #fullscreen .caption {
+        font-size: 14px;
+        max-width: 90%;
+        bottom: 15px;
       }
     }
   </style>
@@ -127,59 +166,72 @@
     <span id="prev-arrow" class="nav-arrow">←</span>
     <img id="fullscreen-image" src="" alt="Full-screen image">
     <span id="next-arrow" class="nav-arrow">→</span>
+    <span id="fullscreen-caption" class="caption"></span>
   </div>
 
   <script>
-    // List of your images
+    // List of your images with captions
     const images = [
-      'image1.jpg',
-      'image2.jpg',
-      'image3.jpg',
-      'image4.jpg',
-      'image5.jpg',
-      'image6.jpg',
-      'image7.jpg',
-      'image8.jpg',
-      'image9.jpg',
-      'image10.jpg',
-      'image11.jpg',
-      'image12.jpg',
-      'image13.jpg',
-      'image14.jpg',
-      'image15.jpg',
-      'image16.jpg',
-      'image17.jpg',
-      'image18.jpg',
-      'image19.jpg',
-      'image20.jpg',
-      'image21.jpg',
-      'image22.jpg',
-      'image23.jpg'
+      { src: 'image1.jpg', caption: 'The Old Garden Poppies' },
+      { src: 'image2.jpg', caption: 'Sandpiper’s Beach' },
+      { src: 'image3.jpg', caption: 'The Seagulls' },
+      { src: 'image4.jpg', caption: 'Mountain Valley Farmstead' },
+      { src: 'image5.jpg', caption: 'The Cat and Lantern' },
+      { src: 'image6.jpg', caption: 'The Cat and Aurora' },
+      { src: 'image7.jpg', caption: 'Chicken Farm' },
+      { src: 'image8.jpg', caption: 'The Daffodils' },
+      { src: 'image9.jpg', caption: 'Midsummer' },
+      { src: 'image10.jpg', caption: 'Eastern Seashore' },
+      { src: 'image11.jpg', caption: 'The Cat and the Moon' },
+      { src: 'image12.jpg', caption: 'Coral Reef' },
+      { src: 'image13.jpg', caption: 'The Homestead' },
+      { src: 'image14.jpg', caption: 'My Little Flower Garden' },
+      { src: 'image15.jpg', caption: 'The Golden Gate Bridge in Fog' },
+      { src: 'image16.jpg', caption: 'Rising Tide' },
+      { src: 'image17.jpg', caption: 'Raven’s Vigil' },
+      { src: 'image18.jpg', caption: 'Cypress Valley Chapel' },
+      { src: 'image19.jpg', caption: 'Flower Lake' },
+      { src: 'image20.jpg', caption: 'Gingerbread Street' },
+      { src: 'image21.jpg', caption: 'Peacock on Magnolia Tree' },
+      { src: 'image22.jpg', caption: 'Snowy Storm' },
+      { src: 'image23.jpg', caption: 'Tulips Under the Night Sky' }
     ];
 
     const gallery = document.getElementById('gallery');
     const fullscreen = document.getElementById('fullscreen');
     const fullscreenImage = document.getElementById('fullscreen-image');
+    const fullscreenCaption = document.getElementById('fullscreen-caption');
     const closeFullscreen = document.getElementById('close-fullscreen');
     const prevArrow = document.getElementById('prev-arrow');
     const nextArrow = document.getElementById('next-arrow');
     let currentImageIndex = -1; // Track the current image in full-screen
     let touchStartX = 0; // Track touch start position for swipe
 
+    // Detect Safari
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    if (isSafari) {
+      prevArrow.classList.add('hide-in-safari');
+      nextArrow.classList.add('hide-in-safari');
+    }
+
     // Populate the gallery
-    images.forEach((imageSrc, index) => {
+    images.forEach((image, index) => {
       const img = document.createElement('img');
-      img.src = imageSrc;
+      img.src = image.src;
       img.alt = `Painting ${index + 1}`;
+      const caption = document.createElement('span');
+      caption.className = 'caption';
+      caption.textContent = image.caption;
       const galleryItem = document.createElement('div');
       galleryItem.className = 'gallery-item';
       galleryItem.appendChild(img);
+      galleryItem.appendChild(caption);
       galleryItem.addEventListener('click', () => {
         currentImageIndex = index; // Set the clicked image index
-        fullscreenImage.src = imageSrc;
+        fullscreenImage.src = image.src;
         fullscreenImage.alt = `Painting ${index + 1}`;
+        fullscreenCaption.textContent = image.caption;
         fullscreen.style.display = 'flex';
-        console.log('Full-screen opened, image index:', index); // Debug
       });
       gallery.appendChild(galleryItem);
     });
@@ -188,7 +240,6 @@
     closeFullscreen.addEventListener('click', () => {
       fullscreen.style.display = 'none';
       currentImageIndex = -1; // Reset index
-      console.log('Full-screen closed'); // Debug
     });
 
     // Close full-screen on click outside image or arrows
@@ -196,16 +247,15 @@
       if (e.target === fullscreen) {
         fullscreen.style.display = 'none';
         currentImageIndex = -1; // Reset index
-        console.log('Full-screen closed via background click'); // Debug
       }
     });
 
     // Function to change image
     function changeImage(newIndex) {
       currentImageIndex = newIndex;
-      fullscreenImage.src = images[currentImageIndex];
+      fullscreenImage.src = images[currentImageIndex].src;
       fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
-      console.log('Image changed to index:', newIndex); // Debug
+      fullscreenCaption.textContent = images[currentImageIndex].caption;
     }
 
     // Navigate images with arrow keys
@@ -219,24 +269,25 @@
       }
     });
 
-    // Navigate images with arrow buttons
-    nextArrow.addEventListener('click', () => {
-      if (fullscreen.style.display === 'flex') {
-        changeImage((currentImageIndex + 1) % images.length); // Next image, wrap around
-      }
-    });
+    // Navigate images with arrow buttons (not in Safari)
+    if (!isSafari) {
+      nextArrow.addEventListener('click', () => {
+        if (fullscreen.style.display === 'flex') {
+          changeImage((currentImageIndex + 1) % images.length); // Next image, wrap around
+        }
+      });
 
-    prevArrow.addEventListener('click', () => {
-      if (fullscreen.style.display === 'flex') {
-        changeImage((currentImageIndex - 1 + images.length) % images.length); // Previous image, wrap around
-      }
-    });
+      prevArrow.addEventListener('click', () => {
+        if (fullscreen.style.display === 'flex') {
+          changeImage((currentImageIndex - 1 + images.length) % images.length); // Previous image, wrap around
+        }
+      });
+    }
 
     // Swipe navigation for touch devices
     fullscreen.addEventListener('touchstart', (e) => {
       if (fullscreen.style.display === 'flex') {
         touchStartX = e.touches[0].clientX; // Store starting X position
-        console.log('Touch start, X:', touchStartX); // Debug
       }
     });
 
