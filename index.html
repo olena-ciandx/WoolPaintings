@@ -70,24 +70,25 @@
       -webkit-overflow-scrolling: touch; /* Smooth scrolling if needed */
     }
     #fullscreen img {
-      max-width: 80%; /* Space for arrows and caption */
-      max-height: 80%;
+      max-width: 80%; /* Space for caption */
+      max-height: 75%; /* Reduced to ensure caption space */
       border: 5px solid white;
       border-radius: 5px;
       z-index: 1001; /* Image above background */
       position: relative;
     }
     #fullscreen .caption {
-      position: absolute;
-      bottom: 20px;
+      position: fixed;
+      bottom: 30px; /* Increased to avoid overlap */
       color: white;
       font-size: 16px;
       text-align: center;
-      max-width: 80%;
-      z-index: 1003; /* Above image */
+      max-width: 90%;
+      z-index: 1004; /* Above image and arrows */
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      width: 100%; /* Ensure full-width alignment */
     }
     #close-fullscreen {
       position: fixed;
@@ -96,7 +97,7 @@
       color: white;
       font-size: 30px;
       cursor: pointer;
-      z-index: 1003; /* Above arrows and image */
+      z-index: 1004; /* Above image and caption */
     }
     .nav-arrow {
       position: fixed;
@@ -109,10 +110,10 @@
       padding: 15px 20px; /* Larger click/tap area */
       border-radius: 5px;
       user-select: none;
-      -webkit-user-select: none; /* Safari compatibility */
-      -moz-user-select: none; /* Firefox compatibility */
-      -ms-user-select: none; /* Edge compatibility */
-      z-index: 1003; /* Above image */
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      z-index: 1004; /* Above image and caption */
       transition: background 0.2s ease-in-out; /* Smooth hover effect */
       -webkit-tap-highlight-color: transparent; /* Prevent tap highlight on iOS */
       line-height: 1; /* Ensure consistent arrow alignment */
@@ -122,7 +123,7 @@
       background: rgba(0, 0, 0, 0.7); /* Darker on hover */
     }
     .nav-arrow.hide-in-safari {
-      display: none; /* Hide arrows in Safari */
+      display: none !important; /* Force hide in Safari */
     }
     #prev-arrow {
       left: 10px;
@@ -153,7 +154,7 @@
       #fullscreen .caption {
         font-size: 14px;
         max-width: 90%;
-        bottom: 15px;
+        bottom: 25px; /* Adjusted for mobile */
       }
     }
   </style>
@@ -207,8 +208,8 @@
     let currentImageIndex = -1; // Track the current image in full-screen
     let touchStartX = 0; // Track touch start position for swipe
 
-    // Detect Safari
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    // Detect Safari (improved for iOS)
+    const isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor) && !/Chrome/.test(navigator.userAgent);
     if (isSafari) {
       prevArrow.classList.add('hide-in-safari');
       nextArrow.classList.add('hide-in-safari');
