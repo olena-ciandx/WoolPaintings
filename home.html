@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Nataliya's Wool Paintings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+    nav {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .nav-button {
+      padding: 10px 20px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-button:hover {
+      background: #555;
+    }
+    .nav-button.inactive {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .home-content {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .artist-image {
+      width: 300px;
+      height: 400px; /* 3:4 proportion */
+      object-fit: cover;
+      border-radius: 10px;
+      background: #ccc; /* Placeholder background */
+    }
+    .description {
+      flex: 1;
+      text-align: left;
+      font-size: 16px;
+      color: #333;
+    }
+    @media (max-width: 600px) {
+      .home-content {
+        flex-direction: column;
+        align-items: center;
+      }
+      .artist-image {
+        width: 200px;
+        height: 267px; /* 3:4 proportion */
+      }
+      .description {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="home.html" class="nav-button inactive">Home</a>
+    <a href="gallery/index.html" class="nav-button">Gallery</a>
+  </nav>
+  <h1>Nataliya's Wool Paintings</h1>
+  <div class="home-content">
+    <img src="artist-placeholder.jpg" alt="Artist Portrait" class="artist-image">
+    <div class="description">
+      <p>Welcome to Nataliya's Wool Paintings! This is a placeholder for the artist's description. Add details about your artistic journey, inspiration, and techniques here.</p>
+      <p>Explore the gallery to view a collection of unique wool paintings, each crafted with care and creativity.</p>
+    </div>
+  </div>
+</body>
+</html>
