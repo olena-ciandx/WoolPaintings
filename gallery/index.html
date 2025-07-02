@@ -95,9 +95,6 @@
       overflow: hidden;
       -webkit-overflow-scrolling: touch;
     }
-    #fullscreen.active {
-      overflow: hidden; /* Prevent scrolling in full-screen */
-    }
     #fullscreen img {
       max-width: 80%;
       max-height: 75%;
@@ -186,8 +183,8 @@
 </head>
 <body>
   <nav>
-    <a href="../home.html" class="nav-button">Home</a>
-    <a href="index.html" class="nav-button inactive">Gallery</a>
+    <a href="../home.html" class="nav-button" onclick="navigateToHome(event)">Home</a>
+    <a href="./index.html" class="nav-button inactive">Gallery</a>
   </nav>
   <h1>Nataliya's Wool Paintings - Gallery</h1>
   <div id="gallery"></div>
@@ -249,6 +246,7 @@
       const img = document.createElement('img');
       img.src = image.src;
       img.alt = `Painting ${index + 1}`;
+      img.onerror = () => console.error(`Failed to load image: ${image.src}`);
       const caption = document.createElement('span');
       caption.className = 'caption';
       caption.textContent = image.caption;
@@ -262,7 +260,7 @@
         fullscreenImage.alt = `Painting ${index + 1}`;
         fullscreenCaption.textContent = image.caption;
         fullscreen.style.display = 'flex';
-        fullscreen.classList.add('active'); // Prevent scroll in full-screen
+        document.body.style.overflow = 'hidden';
       });
       gallery.appendChild(galleryItem);
     });
@@ -270,7 +268,7 @@
     // Close full-screen view
     closeFullscreen.addEventListener('click', () => {
       fullscreen.style.display = 'none';
-      fullscreen.classList.remove('active');
+      document.body.style.overflow = '';
       currentImageIndex = -1;
     });
 
@@ -278,7 +276,7 @@
     fullscreen.addEventListener('click', (e) => {
       if (e.target === fullscreen) {
         fullscreen.style.display = 'none';
-        fullscreen.classList.remove('active');
+        document.body.style.overflow = '';
         currentImageIndex = -1;
       }
     });
@@ -318,13 +316,13 @@
     }
 
     // Swipe navigation for touch devices
-    fullscreen.addEventListener('touchstart', (e) => {
+    document.addEventListener('touchstart', (e) => {
       if (fullscreen.style.display === 'flex') {
         touchStartX = e.touches[0].clientX;
       }
     });
 
-    fullscreen.addEventListener('touchmove', (e) => {
+    document.addEventListener('touchmove', (e) => {
       if (fullscreen.style.display === 'flex') {
         const touchEndX = e.touches[0].clientX;
         const swipeDistance = touchStartX - touchEndX;
@@ -339,6 +337,12 @@
         }
       }
     });
+
+    // Navigate to Home page in same tab
+    function navigateToHome(event) {
+      event.preventDefault();
+      window.location.href = '../home.html';
+    }
   </script>
 </body>
 </html>
