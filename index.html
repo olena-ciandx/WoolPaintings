@@ -30,7 +30,6 @@
       font-size: 16px;
       text-decoration: none;
       transition: background 0.2s;
-      display: block;
     }
     .nav-button:hover {
       background: #555;
@@ -55,7 +54,7 @@
     }
     .artist-image {
       width: 300px;
-      height: 400px;
+      height: 400px; /* 3:4 proportion */
       object-fit: cover;
       border-radius: 10px;
       background: #ccc;
@@ -74,22 +73,6 @@
       line-height: 1.6;
       margin-bottom: 15px;
     }
-    .etsy-link {
-      display: inline-block;
-      background: #ff69b4;
-      color: white !important;
-      padding: 12px 24px;
-      border-radius: 25px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 18px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 8px rgba(255,105,180,0.3);
-    }
-    .etsy-link:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(255,105,180,0.5);
-    }
     @media (max-width: 600px) {
       .home-content {
         flex-direction: column;
@@ -97,7 +80,7 @@
       }
       .artist-image {
         width: 200px;
-        height: 267px;
+        height: 267px; /* 3:4 proportion */
       }
       .description {
         text-align: center;
@@ -108,7 +91,7 @@
 <body>
   <nav>
     <a href="index.html" class="nav-button" onclick="navigateToHome(event)">Home</a>
-    <a href="gallery/index.html" class="nav-button inactive" onclick="navigateToGallery(event)">Gallery</a>
+    <a href="gallery/index.html" class="nav-button" onclick="navigateToGallery(event)">Gallery</a>
   </nav>
 
   <h1>Nataliya's Wool Paintings</h1>
@@ -119,8 +102,7 @@
       <h2>About Nataliya</h2>
       <p>Hi, I'm Nataliya! I create breathtaking paintings using vibrant wool fibers. Each piece is handcrafted with love, blending soft textures and bold colors to bring nature, emotions, and dreams to life.</p>
       <p>From serene landscapes to whimsical portraits, my wool paintings are one-of-a-kind art that adds warmth and wonder to any space.</p>
-      <p><strong>Explore the <a href="gallery/index.html">Gallery</a>!</strong></p>
-      <p><a href="https://www.etsy.com/shop/TallyAndAlly" target="_blank" class="etsy-link">🛒 Shop TallyAndAlly on Etsy</a></p>
+      <p><strong>Explore the <a href="gallery/index.html">Gallery</a> to see my latest works!</strong></p>
     </div>
         <div class="shop-cta">
       <a href="https://www.etsy.com/shop/TallyAndAlly" target="_blank" class="etsy-btn">🛒 Shop All on Etsy</a>
@@ -150,6 +132,7 @@
       window.location.href = 'gallery/index.html';
     }
 
+    // Set active nav on page load
     setActiveNav();
   </script>
 </body>
