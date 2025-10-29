@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Nataliya's Wool Paintings</title>
   <style>
     body {
@@ -34,11 +34,6 @@
     .nav-button:hover {
       background: #555;
     }
-    .nav-button.inactive {
-      opacity: 0.5;
-      cursor: default;
-      pointer-events: none;
-    }
     h1 {
       color: #333;
       margin-bottom: 20px;
@@ -54,7 +49,7 @@
     }
     .artist-image {
       width: 300px;
-      height: 400px; /* 3:4 proportion */
+      height: 400px;
       object-fit: cover;
       border-radius: 10px;
       background: #ccc;
@@ -73,6 +68,21 @@
       line-height: 1.6;
       margin-bottom: 15px;
     }
+    .shop-cta {
+      margin-top: 20px;
+    }
+    .etsy-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #d5641c;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .etsy-btn:hover {
+      background-color: #b44e0f;
+    }
     @media (max-width: 600px) {
       .home-content {
         flex-direction: column;
@@ -80,7 +90,7 @@
       }
       .artist-image {
         width: 200px;
-        height: 267px; /* 3:4 proportion */
+        height: 267px;
       }
       .description {
         text-align: center;
@@ -90,50 +100,23 @@
 </head>
 <body>
   <nav>
-    <a href="index.html" class="nav-button" onclick="navigateToHome(event)">Home</a>
-    <a href="gallery/index.html" class="nav-button" onclick="navigateToGallery(event)">Gallery</a>
+    <a href="/WoolPaintings/index.html" class="nav-button">Home</a>
+    <a href="/WoolPaintings/gallery/index.html" class="nav-button">Gallery</a>
   </nav>
 
   <h1>Nataliya's Wool Paintings</h1>
 
   <div class="home-content">
-    <img src="gallery/artist.jpg" alt="Nataliya the artist" class="artist-image">
+    <img src="/WoolPaintings/gallery/artist.jpg" alt="Nataliya the artist" class="artist-image" />
     <div class="description">
       <h2>About Nataliya</h2>
       <p>Hi, I'm Nataliya! I create breathtaking paintings using vibrant wool fibers. Each piece is handcrafted with love, blending soft textures and bold colors to bring nature, emotions, and dreams to life.</p>
       <p>From serene landscapes to whimsical portraits, my wool paintings are one-of-a-kind art that adds warmth and wonder to any space.</p>
-      <p><strong>Explore the <a href="gallery/index.html">Gallery</a> to see my latest works!</strong></p>
-    </div>
-        <div class="shop-cta">
-      <a href="https://www.etsy.com/shop/TallyAndAlly" target="_blank" class="etsy-btn">🛒 Shop All on Etsy</a>
+      <p><strong>Explore the <a href="/WoolPaintings/gallery/index.html">Gallery</a> to see my latest works!</strong></p>
+      <div class="shop-cta">
+        <a href="https://www.etsy.com/shop/TallyAndAlly" target="_blank" class="etsy-btn">🛒 Shop All on Etsy</a>
+      </div>
     </div>
   </div>
-
-  <script>
-    function setActiveNav() {
-      const homeBtn = document.querySelector('a[onclick="navigateToHome(event)"]');
-      const galleryBtn = document.querySelector('a[onclick="navigateToGallery(event)"]');
-      if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
-        homeBtn.classList.remove('inactive');
-        galleryBtn.classList.add('inactive');
-      } else {
-        homeBtn.classList.add('inactive');
-        galleryBtn.classList.remove('inactive');
-      }
-    }
-
-    function navigateToHome(event) {
-      event.preventDefault();
-      window.location.href = 'index.html';
-    }
-
-    function navigateToGallery(event) {
-      event.preventDefault();
-      window.location.href = 'gallery/index.html';
-    }
-
-    // Set active nav on page load
-    setActiveNav();
-  </script>
 </body>
 </html>
