@@ -57,7 +57,7 @@
       height: 400px; /* 3:4 proportion */
       object-fit: cover;
       border-radius: 10px;
-      background: #ccc; /* Placeholder background */
+      background: #ccc;
     }
     .description {
       flex: 1;
@@ -82,22 +82,11 @@
 </head>
 <body>
   <nav>
-    <a href="./home.html" class="nav-button inactive">Home</a>
-    <a href="./gallery/index.html" class="nav-button" onclick="navigateToGallery(event)">Gallery</a>
+    <a href="/WoolPaintings/index.html" class="nav-button inactive" onclick="navigateToHome(event)">Home</a>
+    <a href="/WoolPaintings/gallery/index.html" class="nav-button" onclick="navigateToGallery(event)">Gallery</a>
   </nav>
+
   <h1>Nataliya's Wool Paintings</h1>
+
   <div class="home-content">
-    <img src="./gallery/artist-placeholder.jpg" alt="Artist Portrait" class="artist-image" onerror="console.error('Failed to load artist image at ./gallery/artist-placeholder.jpg')">
-    <div class="description">
-      <p>Welcome to Nataliya's Wool Paintings! This is a placeholder for the artist's description. Add details about your artistic journey, inspiration, and techniques here.</p>
-      <p>Explore the gallery to view a collection of unique wool paintings, each crafted with care and creativity.</p>
-    </div>
-  </div>
-  <script>
-    function navigateToGallery(event) {
-      event.preventDefault();
-      window.location.href = './gallery/index.html';
-    }
-  </script>
-</body>
-</html>
+    <img src="/WoolPaintings/gallery/artist-placeholder.jpg" alt="Arti
