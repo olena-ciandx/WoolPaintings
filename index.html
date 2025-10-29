@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Gallery - Nataliya's Wool Paintings</title>
+  <title>Nataliya's Wool Paintings</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -44,93 +44,85 @@
       color: #333;
       margin-bottom: 20px;
     }
-    .gallery-container {
+    .home-content {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
     }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .gallery-item {
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-    }
-    .gallery-item:hover {
-      transform: translateY(-5px);
-    }
-    .gallery-item img {
-      width: 100%;
-      height: 300px;
+    .artist-image {
+      width: 300px;
+      height: 400px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 10px;
+      background: #ccc;
     }
-    .gallery-item figcaption {
-      margin-top: 10px;
-      font-weight: bold;
-      color: #555;
+    .description {
+      flex: 1;
+      text-align: left;
       font-size: 16px;
+      color: #333;
     }
-    .shop-cta {
-      margin-top: 40px;
+    .description h2 {
+      color: #555;
+      margin-bottom: 15px;
     }
-    .etsy-btn {
+    .description p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .etsy-link {
       display: inline-block;
       background: #ff69b4;
       color: white !important;
-      padding: 18px 36px;
-      border-radius: 30px;
+      padding: 12px 24px;
+      border-radius: 25px;
       text-decoration: none;
       font-weight: bold;
-      font-size: 20px;
-      box-shadow: 0 6px 12px rgba(255,105,180,0.4);
-      transition: all 0.2s;
+      font-size: 18px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 8px rgba(255,105,180,0.3);
     }
-    .etsy-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 16px rgba(255,105,180,0.6);
+    .etsy-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(255,105,180,0.5);
     }
     @media (max-width: 600px) {
-      .gallery-grid {
-        grid-template-columns: 1fr;
+      .home-content {
+        flex-direction: column;
+        align-items: center;
+      }
+      .artist-image {
+        width: 200px;
+        height: 267px;
+      }
+      .description {
+        text-align: center;
       }
     }
   </style>
 </head>
 <body>
   <nav>
-    <a href="../index.html" class="nav-button inactive" onclick="navigateToHome(event)">Home</a>
-    <a href="index.html" class="nav-button" onclick="navigateToGallery(event)">Gallery</a>
+    <a href="index.html" class="nav-button" onclick="navigateToHome(event)">Home</a>
+    <a href="gallery/index.html" class="nav-button inactive" onclick="navigateToGallery(event)">Gallery</a>
   </nav>
 
   <h1>Nataliya's Wool Paintings</h1>
 
-  <div class="gallery-container">
-    <div class="gallery-grid">
-      <figure class="gallery-item">
-        <img src="1.jpg" alt="Dandelion Duo - Wool Painting Set">
-        <figcaption>Dandelion Duo</figcaption>
-      </figure>
-      <figure class="gallery-item">
-        <img src="2.jpg" alt="Lighthouse & Yacht in Stormy Seas">
-        <figcaption>Lighthouse & Yacht</figcaption>
-      </figure>
-      <figure class="gallery-item">
-        <img src="3.jpg" alt="Mountain Lake - Needle Felted Wool Art">
-        <figcaption>Mountain Lake</figcaption>
-      </figure>
-      <figure class="gallery-item">
-        <img src="4.jpg" alt="Colorful Dreams - Abstract Wool Painting">
-        <figcaption>Colorful Dreams</figcaption>
-      </figure>
-      <!-- Add more: Copy the <figure> block above! -->
+  <div class="home-content">
+    <img src="gallery/artist.jpg" alt="Nataliya the artist" class="artist-image">
+    <div class="description">
+      <h2>About Nataliya</h2>
+      <p>Hi, I'm Nataliya! I create breathtaking paintings using vibrant wool fibers. Each piece is handcrafted with love, blending soft textures and bold colors to bring nature, emotions, and dreams to life.</p>
+      <p>From serene landscapes to whimsical portraits, my wool paintings are one-of-a-kind art that adds warmth and wonder to any space.</p>
+      <p><strong>Explore the <a href="gallery/index.html">Gallery</a>!</strong></p>
+      <p><a href="https://www.etsy.com/shop/TallyAndAlly" target="_blank" class="etsy-link">🛒 Shop TallyAndAlly on Etsy</a></p>
     </div>
-    <div class="shop-cta">
+        <div class="shop-cta">
       <a href="https://www.etsy.com/shop/TallyAndAlly" target="_blank" class="etsy-btn">🛒 Shop All on Etsy</a>
     </div>
   </div>
@@ -139,23 +131,23 @@
     function setActiveNav() {
       const homeBtn = document.querySelector('a[onclick="navigateToHome(event)"]');
       const galleryBtn = document.querySelector('a[onclick="navigateToGallery(event)"]');
-      if (window.location.pathname.includes('gallery')) {
-        homeBtn.classList.add('inactive');
-        galleryBtn.classList.remove('inactive');
-      } else {
+      if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
         homeBtn.classList.remove('inactive');
         galleryBtn.classList.add('inactive');
+      } else {
+        homeBtn.classList.add('inactive');
+        galleryBtn.classList.remove('inactive');
       }
     }
 
     function navigateToHome(event) {
       event.preventDefault();
-      window.location.href = '../index.html';
+      window.location.href = 'index.html';
     }
 
     function navigateToGallery(event) {
       event.preventDefault();
-      window.location.href = 'index.html';
+      window.location.href = 'gallery/index.html';
     }
 
     setActiveNav();
