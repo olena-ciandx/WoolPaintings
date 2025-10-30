@@ -77,7 +77,7 @@
 
   <script>
     /* -------------------
-       Navigation & view
+       Navigation & view (with legacy-home guard)
        ------------------- */
     const homeBtn = document.getElementById('homeBtn');
     const galleryBtn = document.getElementById('galleryBtn');
@@ -101,13 +101,46 @@
     homeBtn.addEventListener('click', () => showHome(true));
     galleryBtn.addEventListener('click', () => { showGallery(true); loadGalleryIfNeeded(); });
 
+    // If user somehow navigated to /WoolPaintings/home.html, normalize it to root
+    function normalizeHomePathOnLoad() {
+      const path = window.location.pathname;
+      if (path.endsWith('/home.html') || path.endsWith('/home') || path.includes('/home.html')) {
+        // replace browser address without creating a new history entry
+        history.replaceState(null, '', '/WoolPaintings/');
+        // show home view (don't push a new state)
+        showHome(false);
+      }
+    }
+
+    // Intercept any <a> clicks that point to a legacy home.html and route to showHome()
+    function handleLegacyHomeLinks() {
+      document.addEventListener('click', (e) => {
+        const a = e.target.closest && e.target.closest('a');
+        if (!a) return;
+        try {
+          const href = a.getAttribute('href') || '';
+          // Normalize relative and absolute cases that end with home.html
+          if (href.endsWith('home.html') || href.endsWith('/home') || href === '/WoolPaintings/home.html') {
+            e.preventDefault();
+            showHome(true);
+          }
+        } catch (err) {
+          // noop
+        }
+      }, { capture: true });
+    }
+
     // On page load / back-button navigation
     window.addEventListener('popstate', () => {
       if (location.pathname.endsWith('/gallery') || location.pathname.includes('/gallery')) showGallery(false);
       else showHome(false);
     });
 
-    // initial view detect
+    // normalize legacy paths and set up link interception
+    normalizeHomePathOnLoad();
+    handleLegacyHomeLinks();
+
+    // initial view detect (after normalization)
     if (window.location.pathname.includes('/gallery')) showGallery(false);
     else showHome(false);
 
