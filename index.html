@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Nataliya's Wool Paintings</title>
   <style>
     body {
@@ -38,17 +38,14 @@
       color: #333;
       margin-bottom: 20px;
     }
-    .home-content, .gallery-content {
-      display: none;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .active {
+    .home-content {
       display: flex;
       justify-content: center;
       align-items: flex-start;
       gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
     }
     .artist-image {
       width: 300px;
@@ -86,19 +83,8 @@
     .etsy-btn:hover {
       background-color: #b44e0f;
     }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      width: 100%;
-    }
-    .gallery-item img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-    }
     @media (max-width: 600px) {
-      .active {
+      .home-content {
         flex-direction: column;
         align-items: center;
       }
@@ -114,39 +100,23 @@
 </head>
 <body>
   <nav>
-    <button class="nav-button" onclick="showSection('home')">Home</button>
-    <button class="nav-button" onclick="showSection('gallery')">Gallery</button>
-  </nav>
+  <a href="/WoolPaintings/" class="nav-button">Home</a>
+  <a href="/WoolPaintings/gallery/" class="nav-button">Gallery</a>
+</nav>
 
   <h1>Nataliya's Wool Paintings</h1>
 
-  <div id="home" class="home-content active">
+  <div class="home-content">
     <img src="gallery/artist.jpg" alt="Nataliya the artist" class="artist-image" />
     <div class="description">
       <h2>About Nataliya</h2>
-      <p>Hi, I'm Nataliya! I create watercolor-like paintings using wool fibers to bring nature, emotions, and dreams to life.</p>
-      <p><strong>Explore the Gallery to see my latest works!</strong></p>
+      <p>Hi, I'm Nataliya! I create breathtaking paintings using vibrant wool fibers. Each piece is handcrafted with love, blending soft textures and bold colors to bring nature, emotions, and dreams to life.</p>
+      <p>From serene landscapes to whimsical portraits, my wool paintings are one-of-a-kind art that adds warmth and wonder to any space.</p>
+      <p><strong>Explore the <a href="gallery/index.html">Gallery</a> to see my latest works!</strong></p>
       <div class="shop-cta">
         <a href="https://www.etsy.com/shop/TallyAndAlly" target="_blank" class="etsy-btn">🛒 Shop All on Etsy</a>
       </div>
     </div>
   </div>
-
-  <div id="gallery" class="gallery-content">
-    <div class="gallery-grid">
-      <div class="gallery-item"><img src="gallery/painting1.jpg" alt="Painting 1" /></div>
-      <div class="gallery-item"><img src="gallery/painting2.jpg" alt="Painting 2" /></div>
-      <div class="gallery-item"><img src="gallery/painting3.jpg" alt="Painting 3" /></div>
-      <!-- Add more paintings as needed -->
-    </div>
-  </div>
-
-  <script>
-    function showSection(section) {
-      document.getElementById('home').classList.remove('active');
-      document.getElementById('gallery').classList.remove('active');
-      document.getElementById(section).classList.add('active');
-    }
-  </script>
 </body>
 </html>
