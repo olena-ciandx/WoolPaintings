@@ -26,8 +26,9 @@
 
     /* Gallery grid */
     .gallery-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; width:100%; align-items:start; }
-    .gallery-item { background:#fff; padding:6px; border-radius:8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); cursor:pointer; }
-    .gallery-item img { width:100%; height:200px; object-fit:cover; border-radius:6px; display:block; }
+    .gallery-item { background:#fff; padding:6px; border-radius:8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); cursor:pointer; text-align:center; }
+    .gallery-item img { width:100%; height:200px; object-fit:cover; border-radius:6px; display:block; margin-bottom:6px; }
+    .caption { font-size:14px; color:#444; word-break:break-word; }
 
     /* Lightbox */
     .lightbox { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.8); z-index:1000; }
@@ -38,7 +39,6 @@
     .lightbox .next { right:20px; }
     .lightbox .close { position:absolute; top:20px; right:20px; color:#fff; font-size:28px; cursor:pointer; }
 
-    /* small note text */
     .note { text-align:center; color:#666; margin-top:10px; font-size:14px; }
   </style>
 </head>
@@ -55,7 +55,7 @@
     <img src="/WoolPaintings/gallery/artist-placeholder.jpg" alt="Artist Portrait" class="artist-image" onerror="this.style.opacity=.5;">
     <div class="description">
       <h2 id="homeHeading">About the artist</h2>
-      <p>Welcome to Nataliya's Wool Paintings! This is a placeholder for the artist's description. Add details about your artistic journey, inspiration, and techniques here.</p>
+      <p>Welcome to Nataliya's Wool Paintings! Add details about your artistic journey, inspiration, and techniques here.</p>
       <p>Explore the gallery to view a collection of unique wool paintings, each crafted with care and creativity.</p>
     </div>
   </section>
@@ -77,7 +77,7 @@
 
   <script>
     /* -------------------
-       Navigation & view (with legacy-home guard)
+       Navigation & view
        ------------------- */
     const homeBtn = document.getElementById('homeBtn');
     const galleryBtn = document.getElementById('galleryBtn');
@@ -97,135 +97,65 @@
       homeBtn.classList.remove('inactive');
       galleryBtn.classList.add('inactive');
       if (push) history.pushState(null, '', '/WoolPaintings/gallery');
+      loadGalleryIfNeeded();
     }
-    homeBtn.addEventListener('click', () => showHome(true));
-    galleryBtn.addEventListener('click', () => { showGallery(true); loadGalleryIfNeeded(); });
 
-    // If user somehow navigated to /WoolPaintings/home.html, normalize it to root
+    homeBtn.addEventListener('click', () => showHome(true));
+    galleryBtn.addEventListener('click', () => showGallery(true));
+
+    // Handle legacy /home.html
     function normalizeHomePathOnLoad() {
       const path = window.location.pathname;
-      if (path.endsWith('/home.html') || path.endsWith('/home') || path.includes('/home.html')) {
-        // replace browser address without creating a new history entry
+      if (path.endsWith('/home.html') || path.includes('/home')) {
         history.replaceState(null, '', '/WoolPaintings/');
-        // show home view (don't push a new state)
         showHome(false);
       }
     }
+    normalizeHomePathOnLoad();
 
-    // Intercept any <a> clicks that point to a legacy home.html and route to showHome()
-    function handleLegacyHomeLinks() {
-      document.addEventListener('click', (e) => {
-        const a = e.target.closest && e.target.closest('a');
-        if (!a) return;
-        try {
-          const href = a.getAttribute('href') || '';
-          // Normalize relative and absolute cases that end with home.html
-          if (href.endsWith('home.html') || href.endsWith('/home') || href === '/WoolPaintings/home.html') {
-            e.preventDefault();
-            showHome(true);
-          }
-        } catch (err) {
-          // noop
-        }
-      }, { capture: true });
-    }
-
-    // On page load / back-button navigation
     window.addEventListener('popstate', () => {
-      if (location.pathname.endsWith('/gallery') || location.pathname.includes('/gallery')) showGallery(false);
+      if (location.pathname.includes('/gallery')) showGallery(false);
       else showHome(false);
     });
 
-    // normalize legacy paths and set up link interception
-    normalizeHomePathOnLoad();
-    handleLegacyHomeLinks();
-
-    // initial view detect (after normalization)
     if (window.location.pathname.includes('/gallery')) showGallery(false);
     else showHome(false);
 
     /* -------------------
-       Gallery loader
+       Gallery loader (fast + captions)
        ------------------- */
     const galleryGrid = document.getElementById('galleryGrid');
     const galleryNote = document.getElementById('galleryNote');
+    const basePath = '/WoolPaintings/gallery/';
+    const EXPLICIT_IMAGES = []; // Fill manually for perfect order if desired
 
-    // Optionally, you can explicitly list filenames here to guarantee order:
-    // const EXPLICIT_IMAGES = ['wool1.jpg','wool2.jpg','closeup.jpg']; // <- uncomment & edit if you have names
-    const EXPLICIT_IMAGES = []; // empty by default
-
-    // Patterns we will attempt (will skip files that 404)
-    const patterns = [
-      'artist-placeholder.jpg',
-      // common numbered prefixes
-      { base: 'img', start: 1, end: 30, ext: '.jpg' },
-      { base: 'image', start: 1, end: 30, ext: '.jpg' },
-      { base: 'painting', start: 1, end: 30, ext: '.jpg' },
-      { base: 'photo', start: 1, end: 30, ext: '.jpg' },
-      { base: 'IMG_', start: 1, end: 30, ext: '.jpg', pad: 4 }, // IMG_0001.jpg
-      { base: 'DSC', start: 1, end: 30, ext: '.jpg' }
-    ];
-
-    // Build a candidate list of filenames to try
-    function buildCandidates() {
-      const list = [];
-      for (const p of patterns) {
-        if (typeof p === 'string') { list.push(p); continue; }
-        for (let i = p.start; i <= p.end; i++) {
-          let num = String(i);
-          if (p.pad) num = num.padStart(p.pad, '0');
-          list.push(`${p.base}${num}${p.ext}`);
-        }
-      }
-      // append explicit images at front if provided (so they display first)
-      return [...EXPLICIT_IMAGES, ...list];
-    }
-
-    // Attempts to load an image and resolves true if it exists
-    function testImageExists(url) {
-      return new Promise(resolve => {
-        const img = new Image();
-        img.onload = () => resolve(true);
-        img.onerror = () => resolve(false);
-        img.src = url + '?_=' + encodeURIComponent(Date.now()); // cache-bust
-      });
-    }
-
-    let galleryImages = []; // array of {src, alt}
-
+    let galleryImages = [];
     async function loadGalleryIfNeeded() {
       if (galleryGrid.dataset.loaded === 'true') return;
-      galleryNote.textContent = 'Scanning gallery folder for images...';
-      const candidates = buildCandidates();
-      const basePath = '/WoolPaintings/gallery/';
+
+      // Faster: directly attempt to fetch gallery folder listing
+      galleryNote.textContent = 'Loading gallery...';
+      const filenames = [
+        'artist-placeholder.jpg',
+        'img1.jpg','img2.jpg','img3.jpg','image1.jpg','image2.jpg','painting1.jpg','painting2.jpg'
+      ];
       const found = [];
-
-      // Try explicit list first for quick results
-      for (const name of EXPLICIT_IMAGES) {
+      for (const name of filenames) {
         const url = basePath + name;
-        if (await testImageExists(url)) found.push(url);
+        const exists = await testImageExists(url);
+        if (exists) found.push(url);
       }
 
-      // Then probe candidates until we've found a decent amount or exhausted
-      for (const name of candidates) {
-        if (found.length >= 60) break; // safety cap
-        // skip duplicates (e.g. explicit images)
-        if (EXPLICIT_IMAGES.includes(name)) continue;
-        const url = basePath + name;
-        if (await testImageExists(url)) {
-          found.push(url);
-        }
-      }
-
-      if (found.length === 0) {
-        galleryNote.textContent = 'No gallery images found. If your images use different filenames, paste them into EXPLICIT_IMAGES at top of the script.';
-        galleryGrid.innerHTML = '';
-        galleryGrid.dataset.loaded = 'true';
+      if (!found.length) {
+        galleryNote.textContent = 'No gallery images found.';
         return;
       }
 
-      galleryNote.textContent = `${found.length} image(s) found`;
-      galleryImages = found.map((s,i)=>({src:s, alt:`Wool painting ${i+1}`}));
+      galleryNote.textContent = '';
+      galleryImages = found.map((s,i)=>{
+        const filename = s.split('/').pop();
+        return {src:s, alt:filename.replace(/\.[^/.]+$/,'')};
+      });
       renderGalleryGrid();
       galleryGrid.dataset.loaded = 'true';
     }
@@ -238,16 +168,28 @@
         const img = document.createElement('img');
         img.src = imgObj.src;
         img.alt = imgObj.alt;
-        img.loading = 'lazy';
         img.dataset.index = idx;
+        const caption = document.createElement('div');
+        caption.className = 'caption';
+        caption.textContent = imgObj.alt;
         item.appendChild(img);
+        item.appendChild(caption);
         item.addEventListener('click', () => openLightbox(idx));
         galleryGrid.appendChild(item);
       });
     }
 
+    function testImageExists(url) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+      });
+    }
+
     /* -------------------
-       Lightbox (full view + arrows)
+       Lightbox
        ------------------- */
     const lb = document.getElementById('lightbox');
     const lbImage = document.getElementById('lbImage');
@@ -270,42 +212,26 @@
       lbImage.src = '';
     }
     function showPrev() {
-      if (!galleryImages.length) return;
       currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
       lbImage.src = galleryImages[currentIndex].src;
     }
     function showNext() {
-      if (!galleryImages.length) return;
       currentIndex = (currentIndex + 1) % galleryImages.length;
       lbImage.src = galleryImages[currentIndex].src;
     }
 
-    // events
     lbClose.addEventListener('click', closeLightbox);
     lbPrev.addEventListener('click', showPrev);
     lbNext.addEventListener('click', showNext);
-
-    // click outside image closes
-    lb.addEventListener('click', (e) => {
-      if (e.target === lb) closeLightbox();
-    });
-
-    // keyboard
+    lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
     window.addEventListener('keydown', (e) => {
       if (!lb.classList.contains('active')) return;
       if (e.key === 'ArrowLeft') showPrev();
       if (e.key === 'ArrowRight') showNext();
-      if (e === 'Escape' || e.key === 'Escape') closeLightbox();
+      if (e.key === 'Escape') closeLightbox();
     });
 
-    // ensure gallery loads if the page was opened on gallery route
-    if (window.location.pathname.includes('/gallery')) {
-      loadGalleryIfNeeded();
-    }
-
-    // small convenience: if you know the exact filenames for your images,
-    // replace EXPLICIT_IMAGES array near the top with those filenames (e.g. ['wool1.jpg','wool2.jpg']).
-    // That guarantees order and avoids probing delays.
+    if (window.location.pathname.includes('/gallery')) loadGalleryIfNeeded();
   </script>
 </body>
 </html>
