@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Nataliya's Wool Paintings</title>
   <style>
     body {
@@ -34,6 +34,11 @@
     .nav-button:hover {
       background: #555;
     }
+    .nav-button.inactive {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
     h1 {
       color: #333;
       margin-bottom: 20px;
@@ -49,7 +54,7 @@
     }
     .artist-image {
       width: 300px;
-      height: 400px;
+      height: 400px; /* 3:4 proportion */
       object-fit: cover;
       border-radius: 10px;
       background: #ccc;
@@ -60,29 +65,6 @@
       font-size: 16px;
       color: #333;
     }
-    .description h2 {
-      color: #555;
-      margin-bottom: 15px;
-    }
-    .description p {
-      line-height: 1.6;
-      margin-bottom: 15px;
-    }
-    .shop-cta {
-      margin-top: 20px;
-    }
-    .etsy-btn {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #d5641c;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-    .etsy-btn:hover {
-      background-color: #b44e0f;
-    }
     @media (max-width: 600px) {
       .home-content {
         flex-direction: column;
@@ -90,7 +72,7 @@
       }
       .artist-image {
         width: 200px;
-        height: 267px;
+        height: 267px; /* 3:4 proportion */
       }
       .description {
         text-align: center;
@@ -100,23 +82,34 @@
 </head>
 <body>
   <nav>
-  <a href="/WoolPaintings/" class="nav-button">Home</a>
-  <a href="/WoolPaintings/gallery/" class="nav-button">Gallery</a>
-</nav>
+    <a href="/WoolPaintings/index.html" class="nav-button inactive" onclick="navigateToHome(event)">Home</a>
+    <a href="/WoolPaintings/gallery/index.html" class="nav-button" onclick="navigateToGallery(event)">Gallery</a>
+  </nav>
 
   <h1>Nataliya's Wool Paintings</h1>
 
   <div class="home-content">
-    <img src="gallery/artist.jpg" alt="Nataliya the artist" class="artist-image" />
+    <img src="/WoolPaintings/gallery/artist-placeholder.jpg" alt="Artist Portrait" class="artist-image" onerror="console.error('Failed to load artist image')">
     <div class="description">
-      <h2>About Nataliya</h2>
-      <p>Hi, I'm Nataliya! I create breathtaking paintings using vibrant wool fibers. Each piece is handcrafted with love, blending soft textures and bold colors to bring nature, emotions, and dreams to life.</p>
-      <p>From serene landscapes to whimsical portraits, my wool paintings are one-of-a-kind art that adds warmth and wonder to any space.</p>
-      <p><strong>Explore the <a href="gallery/index.html">Gallery</a> to see my latest works!</strong></p>
-      <div class="shop-cta">
-        <a href="https://www.etsy.com/shop/TallyAndAlly" target="_blank" class="etsy-btn">🛒 Shop All on Etsy</a>
-      </div>
+      <p>Welcome to Nataliya's Wool Paintings! This is a placeholder for the artist's description. Add details about your artistic journey, inspiration, and techniques here.</p>
+      <p>Explore the gallery to view a collection of unique wool paintings, each crafted with care and creativity.</p>
     </div>
   </div>
+
+  <script>
+    function navigateToHome(event) {
+      event.preventDefault();
+      window.location.href = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? './index.html'
+        : '/WoolPaintings/index.html';
+    }
+
+    function navigateToGallery(event) {
+      event.preventDefault();
+      window.location.href = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? './gallery/index.html'
+        : '/WoolPaintings/gallery/index.html';
+    }
+  </script>
 </body>
 </html>
