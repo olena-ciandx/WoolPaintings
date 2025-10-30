@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nataliya's Wool Paintings</title>
   <style>
     body {
@@ -34,27 +34,25 @@
     .nav-button:hover {
       background: #555;
     }
-    .nav-button.inactive {
-      opacity: 0.5;
-      cursor: default;
-      pointer-events: none;
-    }
     h1 {
       color: #333;
       margin-bottom: 20px;
     }
-    .home-content {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 20px;
+    .home-content, .gallery-content {
+      display: none;
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
     }
+    .active {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
+    }
     .artist-image {
       width: 300px;
-      height: 400px; /* 3:4 proportion */
+      height: 400px;
       object-fit: cover;
       border-radius: 10px;
       background: #ccc;
@@ -65,14 +63,48 @@
       font-size: 16px;
       color: #333;
     }
+    .description h2 {
+      color: #555;
+      margin-bottom: 15px;
+    }
+    .description p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .shop-cta {
+      margin-top: 20px;
+    }
+    .etsy-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #d5641c;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .etsy-btn:hover {
+      background-color: #b44e0f;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      width: 100%;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
     @media (max-width: 600px) {
-      .home-content {
+      .active {
         flex-direction: column;
         align-items: center;
       }
       .artist-image {
         width: 200px;
-        height: 267px; /* 3:4 proportion */
+        height: 267px;
       }
       .description {
         text-align: center;
@@ -82,33 +114,38 @@
 </head>
 <body>
   <nav>
-    <a href="/WoolPaintings/index.html" class="nav-button inactive" onclick="navigateToHome(event)">Home</a>
-    <a href="/WoolPaintings/gallery/index.html" class="nav-button" onclick="navigateToGallery(event)">Gallery</a>
+    <button class="nav-button" onclick="showSection('home')">Home</button>
+    <button class="nav-button" onclick="showSection('gallery')">Gallery</button>
   </nav>
 
   <h1>Nataliya's Wool Paintings</h1>
 
-  <div class="home-content">
-    <img src="/WoolPaintings/gallery/artist-placeholder.jpg" alt="Artist Portrait" class="artist-image" onerror="console.error('Failed to load artist image')">
+  <div id="home" class="home-content active">
+    <img src="gallery/artist.jpg" alt="Nataliya the artist" class="artist-image" />
     <div class="description">
-      <p>Welcome to Nataliya's Wool Paintings! This is a placeholder for the artist's description. Add details about your artistic journey, inspiration, and techniques here.</p>
-      <p>Explore the gallery to view a collection of unique wool paintings, each crafted with care and creativity.</p>
+      <h2>About Nataliya</h2>
+      <p>Hi, I'm Nataliya! I create watercolor-like paintings using wool fibers to bring nature, emotions, and dreams to life.</p>
+      <p><strong>Explore the Gallery to see my latest works!</strong></p>
+      <div class="shop-cta">
+        <a href="https://www.etsy.com/shop/TallyAndAlly" target="_blank" class="etsy-btn">🛒 Shop All on Etsy</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="gallery" class="gallery-content">
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="gallery/painting1.jpg" alt="Painting 1" /></div>
+      <div class="gallery-item"><img src="gallery/painting2.jpg" alt="Painting 2" /></div>
+      <div class="gallery-item"><img src="gallery/painting3.jpg" alt="Painting 3" /></div>
+      <!-- Add more paintings as needed -->
     </div>
   </div>
 
   <script>
-    function navigateToHome(event) {
-      event.preventDefault();
-      window.location.href = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-        ? './index.html'
-        : '/WoolPaintings/index.html';
-    }
-
-    function navigateToGallery(event) {
-      event.preventDefault();
-      window.location.href = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-        ? './gallery/index.html'
-        : '/WoolPaintings/gallery/index.html';
+    function showSection(section) {
+      document.getElementById('home').classList.remove('active');
+      document.getElementById('gallery').classList.remove('active');
+      document.getElementById(section).classList.add('active');
     }
   </script>
 </body>
