@@ -43,8 +43,8 @@
       color: #333;
       margin-bottom: 20px;
     }
-    .home-content, .gallery-content {
-      display: none;
+    .home-content {
+      display: flex;
       justify-content: center;
       align-items: flex-start;
       gap: 20px;
@@ -54,7 +54,7 @@
     }
     .artist-image {
       width: 300px;
-      height: 400px;
+      height: 400px; /* 3:4 proportion */
       object-fit: cover;
       border-radius: 10px;
       background: #ccc;
@@ -65,19 +65,6 @@
       font-size: 16px;
       color: #333;
     }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      width: 100%;
-    }
-    .gallery-item img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      border-radius: 10px;
-      background: #ccc;
-    }
     @media (max-width: 600px) {
       .home-content {
         flex-direction: column;
@@ -85,7 +72,7 @@
       }
       .artist-image {
         width: 200px;
-        height: 267px;
+        height: 267px; /* 3:4 proportion */
       }
       .description {
         text-align: center;
@@ -95,60 +82,33 @@
 </head>
 <body>
   <nav>
-    <button id="homeBtn" class="nav-button inactive">Home</button>
-    <button id="galleryBtn" class="nav-button">Gallery</button>
+    <a href="/WoolPaintings/index.html" class="nav-button inactive" onclick="navigateToHome(event)">Home</a>
+    <a href="/WoolPaintings/gallery/index.html" class="nav-button" onclick="navigateToGallery(event)">Gallery</a>
   </nav>
 
   <h1>Nataliya's Wool Paintings</h1>
 
-  <!-- Home Section -->
-  <div id="home" class="home-content">
-    <img src="/WoolPaintings/gallery/artist-placeholder.jpg" alt="Artist Portrait" class="artist-image">
+  <div class="home-content">
+    <img src="/WoolPaintings/gallery/artist-placeholder.jpg" alt="Artist Portrait" class="artist-image" onerror="console.error('Failed to load artist image')">
     <div class="description">
       <p>Welcome to Nataliya's Wool Paintings! This is a placeholder for the artist's description. Add details about your artistic journey, inspiration, and techniques here.</p>
       <p>Explore the gallery to view a collection of unique wool paintings, each crafted with care and creativity.</p>
     </div>
   </div>
 
-  <!-- Gallery Section -->
-  <div id="gallery" class="gallery-content">
-    <div class="gallery-grid">
-      <div class="gallery-item"><img src="/WoolPaintings/gallery/artist-placeholder.jpg" alt="Wool Painting 1"></div>
-      <div class="gallery-item"><img src="/WoolPaintings/gallery/artist-placeholder.jpg" alt="Wool Painting 2"></div>
-      <div class="gallery-item"><img src="/WoolPaintings/gallery/artist-placeholder.jpg" alt="Wool Painting 3"></div>
-    </div>
-  </div>
-
   <script>
-    const homeBtn = document.getElementById('homeBtn');
-    const galleryBtn = document.getElementById('galleryBtn');
-    const homeSection = document.getElementById('home');
-    const gallerySection = document.getElementById('gallery');
-
-    function showHome() {
-      homeSection.style.display = 'flex';
-      gallerySection.style.display = 'none';
-      homeBtn.classList.add('inactive');
-      galleryBtn.classList.remove('inactive');
-      history.pushState(null, '', '/WoolPaintings/');
+    function navigateToHome(event) {
+      event.preventDefault();
+      window.location.href = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? './index.html'
+        : '/WoolPaintings/index.html';
     }
 
-    function showGallery() {
-      homeSection.style.display = 'none';
-      gallerySection.style.display = 'flex';
-      homeBtn.classList.remove('inactive');
-      galleryBtn.classList.add('inactive');
-      history.pushState(null, '', '/WoolPaintings/gallery');
-    }
-
-    homeBtn.addEventListener('click', showHome);
-    galleryBtn.addEventListener('click', showGallery);
-
-    // detect which section to show on page load
-    if (window.location.pathname.includes('/gallery')) {
-      showGallery();
-    } else {
-      showHome();
+    function navigateToGallery(event) {
+      event.preventDefault();
+      window.location.href = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? './gallery/index.html'
+        : '/WoolPaintings/gallery/index.html';
     }
   </script>
 </body>
