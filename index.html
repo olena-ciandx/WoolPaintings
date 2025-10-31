@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Nataliya's Wool Paintings - Gallery</title>
+  <title>Nataliya's Wool Paintings</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -43,305 +43,72 @@
       color: #333;
       margin-bottom: 20px;
     }
-    #gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 10px;
+    .home-content {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
       max-width: 1200px;
       margin: 0 auto;
+      padding: 20px;
     }
-    .gallery-item {
-      cursor: pointer;
-      transition: transform 0.2s;
-      width: 220px;
-      background-color: black;
-      border: 2px solid #333333;
-      box-sizing: border-box;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .artist-image {
+      width: 300px;
+      height: 400px; /* 3:4 proportion */
+      object-fit: cover;
+      border-radius: 10px;
+      background: #ccc;
     }
-    .gallery-item img {
-      width: 200px;
-      height: 200px;
-      object-fit: contain;
-      border-radius: 5px;
-    }
-    .gallery-item:hover {
-      transform: scale(1.05);
-    }
-    .gallery-item .caption {
-      color: white;
-      font-size: 14px;
-      margin-top: 5px;
-      text-align: center;
-      max-width: 200px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    #fullscreen {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.9);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      overflow: hidden;
-      -webkit-overflow-scrolling: touch;
-    }
-    #fullscreen img {
-      max-width: 80%;
-      max-height: 75%;
-      border: 5px solid white;
-      border-radius: 5px;
-      z-index: 1001;
-      position: relative;
-    }
-    #fullscreen .caption {
-      position: fixed;
-      bottom: 30px;
-      color: white;
+    .description {
+      flex: 1;
+      text-align: left;
       font-size: 16px;
-      text-align: center;
-      max-width: 90%;
-      z-index: 1004;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 100%;
-    }
-    #close-fullscreen {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      color: white;
-      font-size: 30px;
-      cursor: pointer;
-      z-index: 1004;
-    }
-    .nav-arrow {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      color: white;
-      font-size: 40px;
-      cursor: pointer;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 15px 20px;
-      border-radius: 5px;
-      user-select: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      z-index: 1004;
-      transition: background 0.2s ease-in-out;
-      -webkit-tap-highlight-color: transparent;
-      line-height: 1;
-      touch-action: manipulation;
-    }
-    .nav-arrow:hover {
-      background: rgba(0, 0, 0, 0.7);
-    }
-    .nav-arrow.hide-in-mobile {
-      display: none !important;
-    }
-    #prev-arrow {
-      left: 10px;
-    }
-    #next-arrow {
-      right: 10px;
+      color: #333;
     }
     @media (max-width: 600px) {
-      #gallery {
-        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      .home-content {
+        flex-direction: column;
+        align-items: center;
       }
-      .gallery-item {
-        width: 170px;
-        padding: 8px;
+      .artist-image {
+        width: 200px;
+        height: 267px; /* 3:4 proportion */
       }
-      .gallery-item img {
-        width: 150px;
-        height: 150px;
-      }
-      .gallery-item .caption {
-        font-size: 12px;
-        max-width: 150px;
-      }
-      #fullscreen .caption {
-        font-size: 14px;
-        max-width: 90%;
-        bottom: 25px;
+      .description {
+        text-align: center;
       }
     }
   </style>
 </head>
 <body>
   <nav>
-    <a href="../home.html" class="nav-button" onclick="navigateToHome(event)">Home</a>
-    <a href="./index.html" class="nav-button inactive">Gallery</a>
+    <a href="/WoolPaintings/index.html" class="nav-button inactive" onclick="navigateToHome(event)">Home</a>
+    <a href="/WoolPaintings/gallery/index.html" class="nav-button" onclick="navigateToGallery(event)">Gallery</a>
   </nav>
-  <h1>Nataliya's Wool Paintings - Gallery</h1>
-  <div id="gallery"></div>
-  <div id="fullscreen">
-    <span id="close-fullscreen">×</span>
-    <span id="prev-arrow" class="nav-arrow">←</span>
-    <img id="fullscreen-image" src="" alt="Full-screen image">
-    <span id="next-arrow" class="nav-arrow">→</span>
-    <span id="fullscreen-caption" class="caption"></span>
+
+  <h1>Nataliya's Wool Paintings</h1>
+
+  <div class="home-content">
+    <img src="/WoolPaintings/gallery/artist-placeholder.jpg" alt="Artist Portrait" class="artist-image" onerror="console.error('Failed to load artist image')">
+    <div class="description">
+      <p>Welcome to Nataliya's Wool Paintings! This is a placeholder for the artist's description. Add details about your artistic journey, inspiration, and techniques here.</p>
+      <p>Explore the gallery to view a collection of unique wool paintings, each crafted with care and creativity.</p>
+    </div>
   </div>
 
   <script>
-    // List of your images with captions
-    const images = [
-      { src: 'image1.jpg', caption: 'Poppy Garden' },
-      { src: 'image2.jpg', caption: 'Sandpiper’s Beach' },
-      { src: 'image3.jpg', caption: 'Seagulls' },
-      { src: 'image4.jpg', caption: 'Mountain Valley Farmstead' },
-      { src: 'image5.jpg', caption: 'Cat and Lantern' },
-      { src: 'image6.jpg', caption: 'Cat and Aurora' },
-      { src: 'image7.jpg', caption: 'Chicken Farm' },
-      { src: 'image8.jpg', caption: 'Daffodils' },
-      { src: 'image9.jpg', caption: 'Midsummer' },
-      { src: 'image10.jpg', caption: 'Eastern Seashore' },
-      { src: 'image11.jpg', caption: 'Cat and the Moon' },
-      { src: 'image12.jpg', caption: 'Coral Reef' },
-      { src: 'image13.jpg', caption: 'Homestead' },
-      { src: 'image14.jpg', caption: 'My Little Flower Garden' },
-      { src: 'image15.jpg', caption: 'Golden Gate Bridge in Fog' },
-      { src: 'image16.jpg', caption: 'Rising Tide' },
-      { src: 'image17.jpg', caption: 'Raven’s Vigil' },
-      { src: 'image18.jpg', caption: 'Cypress Valley Chapel' },
-      { src: 'image19.jpg', caption: 'Flower Lake' },
-      { src: 'image20.jpg', caption: 'Gingerbread Street' },
-      { src: 'image21.jpg', caption: 'Peacock on Magnolia Tree' },
-      { src: 'image22.jpg', caption: 'Snowy Storm' },
-      { src: 'image23.jpg', caption: 'Tulips Under the Night Sky' }
-    ];
-
-    const gallery = document.getElementById('gallery');
-    const fullscreen = document.getElementById('fullscreen');
-    const fullscreenImage = document.getElementById('fullscreen-image');
-    const fullscreenCaption = document.getElementById('fullscreen-caption');
-    const closeFullscreen = document.getElementById('close-fullscreen');
-    const prevArrow = document.getElementById('prev-arrow');
-    const nextArrow = document.getElementById('next-arrow');
-    let currentImageIndex = -1;
-    let touchStartX = 0;
-
-    // Detect mobile browsers
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
-      prevArrow.classList.add('hide-in-mobile');
-      nextArrow.classList.add('hide-in-mobile');
-    }
-
-    // Populate the gallery
-    images.forEach((image, index) => {
-      const img = document.createElement('img');
-      img.src = image.src;
-      img.alt = `Painting ${index + 1}`;
-      img.onerror = () => console.error(`Failed to load image: ${image.src}`);
-      const caption = document.createElement('span');
-      caption.className = 'caption';
-      caption.textContent = image.caption;
-      const galleryItem = document.createElement('div');
-      galleryItem.className = 'gallery-item';
-      galleryItem.appendChild(img);
-      galleryItem.appendChild(caption);
-      galleryItem.addEventListener('click', () => {
-        currentImageIndex = index;
-        fullscreenImage.src = image.src;
-        fullscreenImage.alt = `Painting ${index + 1}`;
-        fullscreenCaption.textContent = image.caption;
-        fullscreen.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      });
-      gallery.appendChild(galleryItem);
-    });
-
-    // Close full-screen view
-    closeFullscreen.addEventListener('click', () => {
-      fullscreen.style.display = 'none';
-      document.body.style.overflow = '';
-      currentImageIndex = -1;
-    });
-
-    // Close full-screen on click outside image or arrows
-    fullscreen.addEventListener('click', (e) => {
-      if (e.target === fullscreen) {
-        fullscreen.style.display = 'none';
-        document.body.style.overflow = '';
-        currentImageIndex = -1;
-      }
-    });
-
-    // Function to change image
-    function changeImage(newIndex) {
-      currentImageIndex = newIndex;
-      fullscreenImage.src = images[currentImageIndex].src;
-      fullscreenImage.alt = `Painting ${currentImageIndex + 1}`;
-      fullscreenCaption.textContent = images[currentImageIndex].caption;
-    }
-
-    // Navigate images with arrow keys
-    document.addEventListener('keydown', (e) => {
-      if (fullscreen.style.display === 'flex') {
-        if (e.key === 'ArrowRight') {
-          changeImage((currentImageIndex + 1) % images.length);
-        } else if (e.key === 'ArrowLeft') {
-          changeImage((currentImageIndex - 1 + images.length) % images.length);
-        }
-      }
-    });
-
-    // Navigate images with arrow buttons (not on mobile)
-    if (!isMobile) {
-      nextArrow.addEventListener('click', () => {
-        if (fullscreen.style.display === 'flex') {
-          changeImage((currentImageIndex + 1) % images.length);
-        }
-      });
-
-      prevArrow.addEventListener('click', () => {
-        if (fullscreen.style.display === 'flex') {
-          changeImage((currentImageIndex - 1 + images.length) % images.length);
-        }
-      });
-    }
-
-    // Swipe navigation for touch devices
-    document.addEventListener('touchstart', (e) => {
-      if (fullscreen.style.display === 'flex') {
-        touchStartX = e.touches[0].clientX;
-      }
-    });
-
-    document.addEventListener('touchmove', (e) => {
-      if (fullscreen.style.display === 'flex') {
-        const touchEndX = e.touches[0].clientX;
-        const swipeDistance = touchStartX - touchEndX;
-        const swipeThreshold = 50;
-
-        if (swipeDistance > swipeThreshold) {
-          changeImage((currentImageIndex + 1) % images.length);
-          touchStartX = touchEndX;
-        } else if (swipeDistance < -swipeThreshold) {
-          changeImage((currentImageIndex - 1 + images.length) % images.length);
-          touchStartX = touchEndX;
-        }
-      }
-    });
-
-    // Navigate to Home page in same tab
     function navigateToHome(event) {
       event.preventDefault();
-      window.location.href = 'https://olena-ciandx.github.io/WoolPaintings/';
+      window.location.href = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? './index.html'
+        : '/WoolPaintings/index.html';
+    }
+
+    function navigateToGallery(event) {
+      event.preventDefault();
+      window.location.href = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? './gallery/index.html'
+        : '/WoolPaintings/gallery/index.html';
     }
   </script>
 </body>
