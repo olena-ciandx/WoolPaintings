@@ -52,6 +52,18 @@
       margin: 0 auto;
       padding: 20px;
     }
+    /* Give room for the left-side nav on desktop so content won't overlap it */
+.home-content {
+  margin-left: 170px; /* adjust number if your nav is wider/narrower */
+}
+
+/* Make sure nav spacing is removed on small screens (keeps mobile layout intact) */
+@media (max-width: 600px) {
+  .home-content {
+    margin-left: 0;
+    margin-top: 10px; /* optional: separate content from nav on mobile */
+  }
+}
     .artist-image {
       width: 300px;
       height: 400px; /* 3:4 proportion */
