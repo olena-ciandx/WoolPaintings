@@ -58,12 +58,45 @@
     }
 
     /* Make sure nav spacing is removed on small screens (keeps mobile layout intact) */
-    @media (max-width: 600px) {
-      .home-content {
-        margin-left: 0;
-        margin-top: 10px; /* optional: separate content from nav on mobile */
-      }
-    }
+   /* ---- REPLACE your existing @media (max-width: 900px) block with this ---- */
+@media (max-width: 900px) {
+  /* Make the page flow vertically so we can reorder elements visually */
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Place title first, then nav, then the main content */
+  h1 {
+    order: 1;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    z-index: 10; /* ensure title sits above non-nav content if needed */
+  }
+
+  nav {
+    order: 2;
+    position: relative; /* put nav back in document flow */
+    top: 0;
+    left: 0;
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px 0;
+    z-index: 20; /* keep nav on top of the title if any stacking occurs */
+  }
+
+  .home-content {
+    order: 3;
+    margin-left: 0;
+    margin-top: 10px;
+    flex-direction: column;
+    align-items: center;
+  }
+}
 
     .artist-image {
       width: 300px;
