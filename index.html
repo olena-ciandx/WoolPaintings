@@ -124,14 +124,21 @@
         text-align: center;
       }
       nav {
-        position: relative;
-        top: 0;
-        left: 0;
-        flex-direction: row;
-        justify-content: center;
-        gap: 15px;
-        margin-bottom: 20px;
-      }
+    position: static;  /* ✅ puts nav back into normal flow */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;   /* ✅ allows wrapping if too narrow */
+    gap: 10px;
+    margin-top: 10px;  /* ✅ adds spacing below title */
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    margin-top: 60px;  /* ✅ pushes title down from top edge */
+    margin-bottom: 10px;
+  }
     }
 
     /* ✅ New section added to fix mobile overlap on Gallery page */
